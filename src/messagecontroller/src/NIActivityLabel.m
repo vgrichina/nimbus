@@ -7,6 +7,8 @@
 
 #import "NIActivityLabel.h"
 
+#import "NIFoundationMethods.h"
+
 static CGFloat kMargin          = 10;
 static CGFloat kPadding         = 15;
 static CGFloat kBannerPadding   = 8;

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "NIOperations.h"
 #import "NIActivityLabel.h"
 
 @protocol NIPostControllerDelegate;

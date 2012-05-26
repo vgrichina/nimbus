@@ -17,7 +17,8 @@
 #import "NICommonMetrics.h"
 
 #import "NISDKAvailability.h"
-
+#import "NIDeviceOrientation.h"
+#import "NIFoundationMethods.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CGRect NINavigationFrame() {

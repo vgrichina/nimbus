@@ -8,6 +8,11 @@
 
 #import "NIPostController.h"
 
+#import "NIDeviceOrientation.h"
+#import "NIFoundationMethods.h"
+#import "NICommonMetrics.h"
+#import "NSString+NimbusCore.h"
+
 static const CGFloat kMarginX = 5;
 static const CGFloat kMarginY = 6;
 

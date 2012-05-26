@@ -8,6 +8,8 @@
 
 #import "NIGradientView.h"
 
+#import "NIFoundationMethods.h"
+
 @implementation NIGradientView
 
 @synthesize startColor = _startColor;
