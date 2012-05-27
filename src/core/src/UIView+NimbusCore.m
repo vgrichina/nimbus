@@ -39,13 +39,13 @@
 - (UIView*)descendantOrSelfWithClass:(Class)cls {
     if ([self isKindOfClass:cls])
         return self;
-    
+
     for (UIView* child in self.subviews) {
         UIView* it = [child descendantOrSelfWithClass:cls];
         if (it)
             return it;
     }
-    
+
     return nil;
 }
 
@@ -54,10 +54,10 @@
 - (UIView*)ancestorOrSelfWithClass:(Class)cls {
     if ([self isKindOfClass:cls]) {
         return self;
-        
+
     } else if (self.superview) {
         return [self.superview ancestorOrSelfWithClass:cls];
-        
+
     } else {
         return nil;
     }

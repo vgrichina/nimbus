@@ -25,7 +25,7 @@
 -(void)dealloc {
     NI_RELEASE_SAFELY(_startColor);
     NI_RELEASE_SAFELY(_endColor);
-    
+
     [super dealloc];
 }
 
@@ -37,7 +37,7 @@
                                                    (id)[_startColor CGColor],
                                                    (id)[_endColor CGColor], nil]];
     }
-    
+
     [super drawRect:rect];
 }
 

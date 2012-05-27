@@ -249,7 +249,7 @@
       NSString* prefix = [title substringToIndex:1];
       if (nil != [sectionPrefixToSectionIndex objectForKey:prefix]) {
         lastIndex = [[sectionPrefixToSectionIndex objectForKey:prefix] intValue];
-        
+
       } else {
         [sectionPrefixToSectionIndex setObject:[NSNumber numberWithInt:lastIndex] forKey:prefix];
       }
@@ -290,7 +290,7 @@
   NIDASSERT((section >= 0 && section < self.sections.count) || 0 == self.sections.count);
   if (section >= 0 && section < self.sections.count) {
     return [[self.sections objectAtIndex:section] footerTitle];
-    
+
   } else {
     return nil;
   }

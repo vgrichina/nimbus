@@ -61,9 +61,9 @@ static const CGFloat kMarginY = 6;
                    [[[NIMessageSubjectField alloc] initWithTitle: NSLocalizedString(@"Subject:", @"")
                                                         required: NO] autorelease],
                    nil];
-        
+
         self.title = NSLocalizedString(@"New Message", @"");
-        
+
         self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]
                                                   initWithTitle: NSLocalizedString(@"Cancel", @"")
                                                   style: UIBarButtonItemStyleBordered
@@ -76,7 +76,7 @@ static const CGFloat kMarginY = 6;
                                                    action: @selector(send)] autorelease];
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
-    
+
     return self;
 }
 
@@ -87,7 +87,7 @@ static const CGFloat kMarginY = 6;
     if (self) {
         _initialRecipients = [recipients retain];
     }
-    
+
     return self;
 }
 
@@ -97,7 +97,7 @@ static const CGFloat kMarginY = 6;
 {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
+
     // Release any cached data, images, etc that aren't in use.
 }
 
@@ -140,12 +140,12 @@ static const CGFloat kMarginY = 6;
     for (UIView* view in _fieldViews) {
         [view removeFromSuperview];
     }
-    
+
     [_textView removeFromSuperview];
-    
+
     [_fieldViews release];
     _fieldViews = [[NSMutableArray alloc] init];
-    
+
     CGFloat y = 0;
     for (NIMessageField* field in _fields) {
         NIPickerTextField* textField = [field createViewForController:self];
@@ -157,7 +157,7 @@ static const CGFloat kMarginY = 6;
             textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [textField sizeToFit];
             y += textField.frame.size.height;
-            
+
             UILabel* label = [[[UILabel alloc] init] autorelease];
             label.text = field.title;
             label.font = [UIFont systemFontOfSize:15];
@@ -166,10 +166,10 @@ static const CGFloat kMarginY = 6;
             label.frame = CGRectInset(label.frame, -2, 0);
             textField.leftView = label;
             textField.leftViewMode = UITextFieldViewModeAlways;
-            
+
             [_scrollView addSubview:textField];
             [_fieldViews addObject:textField];
-            
+
             UIView* separator = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 1)] autorelease];
             separator.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1];
             separator.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -177,7 +177,7 @@ static const CGFloat kMarginY = 6;
             y += separator.frame.size.height;
         }
     }
-    
+
     [_scrollView addSubview:_textView];
 }
 
@@ -185,7 +185,7 @@ static const CGFloat kMarginY = 6;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)layoutViews {
     CGFloat y = 0;
-    
+
     for (UIView* view in _scrollView.subviews) {
         view.frame = CGRectMake(0, y, self.view.frame.size.width, view.frame.size.height);
         y += view.frame.size.height;
@@ -203,7 +203,7 @@ static const CGFloat kMarginY = 6;
         _textView.frame = textViewFrame;
     }
     _textView.hidden = NO;
-    
+
     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, y);
 }
 
@@ -218,7 +218,7 @@ static const CGFloat kMarginY = 6;
                 if (textField.cells.count) {
                     return YES;
                 }
-                
+
             } else if ([field isKindOfClass:[NIMessageTextField class]]) {
                 UITextField* textField = [_fieldViews objectAtIndex:i];
                 if (NIIsStringWithAnyText(textField.text) &&
@@ -228,7 +228,7 @@ static const CGFloat kMarginY = 6;
             }
         }
     }
-    
+
     return _textView.text.length;
 }
 
@@ -240,7 +240,7 @@ static const CGFloat kMarginY = 6;
          !_textView.text.isWhitespaceAndNewlines)) {
             return NO;
         }
-    
+
     for (int i = 0; i < _fields.count; ++i) {
         NIMessageField* field = [_fields objectAtIndex:i];
         if (field.required) {
@@ -249,7 +249,7 @@ static const CGFloat kMarginY = 6;
                 if (!textField.cells.count) {
                     return NO;
                 }
-                
+
             } else if ([field isKindOfClass:[NIMessageTextField class]]) {
                 UITextField* textField = [_fieldViews objectAtIndex:i];
                 if (!NIIsStringWithAnyText(textField.text) &&
@@ -259,7 +259,7 @@ static const CGFloat kMarginY = 6;
             }
         }
     }
-    
+
     return YES;
 }
 
@@ -301,7 +301,7 @@ static const CGFloat kMarginY = 6;
         }
         ++fieldIndex;
     }
-    
+
     if (_textView.isFirstResponder) {
         return _fieldViews.count;
     }
@@ -314,7 +314,7 @@ static const CGFloat kMarginY = 6;
     if (fieldIndex < _fieldViews.count) {
         UIView* view = [_fieldViews objectAtIndex:fieldIndex];
         [view becomeFirstResponder];
-        
+
     } else {
         [_textView becomeFirstResponder];
     }
@@ -324,7 +324,7 @@ static const CGFloat kMarginY = 6;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)showRecipientPicker {
     [self messageWillShowRecipientPicker];
-    
+
     if ([_delegate respondsToSelector:@selector(composeControllerShowRecipientPicker:)]) {
         [_delegate composeControllerShowRecipientPicker:self];
     }
@@ -340,11 +340,11 @@ static const CGFloat kMarginY = 6;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)loadView {
     [super loadView];
-    
+
     self.view.frame = [UIScreen mainScreen].applicationFrame;
     self.view.backgroundColor = [UIColor whiteColor];
     self.view.autoresizesSubviews = YES;
-    
+
     CGRect scrollViewFrame = NIKeyboardNavigationFrame();
     _scrollView = [[UIScrollView alloc] initWithFrame:scrollViewFrame];
     _scrollView.backgroundColor = [UIColor clearColor];
@@ -354,7 +354,7 @@ static const CGFloat kMarginY = 6;
     _scrollView.showsHorizontalScrollIndicator = NO;
     [_textView setScrollsToTop:YES];
     [self.view addSubview:_scrollView];
-    
+
     _textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, _scrollView.frame.size.width, 0)];
     [_textView setScrollEnabled:NO];
     [_textView setScrollsToTop:NO];
@@ -364,7 +364,7 @@ static const CGFloat kMarginY = 6;
     _textView.delegate = self;
     _textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_textView sizeToFit];
-    
+
     [self createFieldViews];
     [self layoutViews];
 }
@@ -383,14 +383,14 @@ static const CGFloat kMarginY = 6;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     if (_initialRecipients) {
         for (id recipient in _initialRecipients) {
             [self addRecipient:recipient forFieldAtIndex:0];
         }
         NI_RELEASE_SAFELY(_initialRecipients);
     }
-    
+
     for (NSInteger i = 0; i < _fields.count+1; ++i) {
         if (![self fieldHasValueAtIndex:i]) {
             UIView* view = [self viewForFieldAtIndex:i];
@@ -399,7 +399,7 @@ static const CGFloat kMarginY = 6;
         }
     }
     [[self viewForFieldAtIndex:0] becomeFirstResponder];
-    
+
     [self updateSendCommand];
 }
 
@@ -484,7 +484,7 @@ replacementString:(NSString *)string {
                 [scrollView scrollRectToVisible:CGRectMake(0,scrollView.contentSize.height-1,1,1)
                                        animated:NO];
             }
-            
+
         } else {
             [scrollView scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
         }
@@ -511,41 +511,41 @@ replacementString:(NSString *)string {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)constrainMessageEditorToText {
     CGFloat oldHeight = _textView.frame.size.height;
-    
+
     CGFloat lineHeight = _textView.font.lineHeight;
     CGFloat minHeight = _minMessageTextViewHeight;
     CGFloat maxWidth = _textView.frame.size.width - 31;
-    
+
     NSString* text = _textView.text;
     if (!text.length) {
         text = @"M";
     }
-    
+
     CGSize textSize = [text sizeWithFont:_textView.font
                        constrainedToSize:CGSizeMake(maxWidth, CGFLOAT_MAX)
                            lineBreakMode:UILineBreakModeWordWrap];
-    
+
     CGFloat newHeight = textSize.height;
     if ([text characterAtIndex:text.length-1] == 10) {
         newHeight += lineHeight;
     }
-    
+
     if (newHeight < minHeight) {
         newHeight = minHeight;
     } else {
         newHeight += kPaddingY*2;
     }
-    
+
     int numberOfLines = (int)floor(newHeight / lineHeight);
-    
+
     CGFloat diff = newHeight - oldHeight;
-    
+
     CGSize scrollViewContentSize = _scrollView.contentSize;
     CGRect scrollViewFrame = _scrollView.frame;
     CGRect scrollViewBounds = _scrollView.bounds;
     CGPoint offset = _scrollView.contentOffset;
     CGRect textViewFrame = _textView.frame;
-    
+
     if (oldHeight && diff) {
         if (floor(minHeight / lineHeight) < numberOfLines) {
             _textView.frame = NIRectContract(_textView.frame, 0, -diff);
@@ -638,7 +638,7 @@ replacementString:(NSString *)string {
     if (dataSource != _dataSource) {
         [_dataSource release];
         _dataSource = [dataSource retain];
-        
+
         for (UITextField* textField in _fieldViews) {
             if ([textField isKindOfClass:[NIPickerTextField class]]) {
                 NIPickerTextField* menuTextField = (NIPickerTextField*)textField;
@@ -654,7 +654,7 @@ replacementString:(NSString *)string {
     if (fields != _fields) {
         [_fields release];
         _fields = [fields retain];
-        
+
         if (_fieldViews) {
             [self createFieldViews];
         }
@@ -680,14 +680,14 @@ replacementString:(NSString *)string {
     NSString* text = nil;
     if (fieldIndex == _fieldViews.count) {
         text = _textView.text;
-        
+
     } else {
         NIPickerTextField* textField = [_fieldViews objectAtIndex:fieldIndex];
         if ([textField isKindOfClass:[NIPickerTextField class]]) {
             text = textField.text;
         }
     }
-    
+
     NSCharacterSet* whitespace = [NSCharacterSet whitespaceCharacterSet];
     return [text stringByTrimmingCharactersInSet:whitespace];
 }
@@ -697,7 +697,7 @@ replacementString:(NSString *)string {
 - (void)setText:(NSString*)text forFieldAtIndex:(NSUInteger)fieldIndex {
     if (fieldIndex == _fieldViews.count) {
         _textView.text = text;
-        
+
     } else {
         NIPickerTextField* textField = [_fieldViews objectAtIndex:fieldIndex];
         if ([textField isKindOfClass:[NIPickerTextField class]]) {
@@ -711,7 +711,7 @@ replacementString:(NSString *)string {
 - (BOOL)fieldHasValueAtIndex:(NSUInteger)fieldIndex {
     if (fieldIndex == _fieldViews.count) {
         return _textView.text.length > 0;
-        
+
     } else {
         NIMessageField* field = [_fields objectAtIndex:fieldIndex];
         if ([field isKindOfClass:[NIMessageRecipientField class]]) {
@@ -731,7 +731,7 @@ replacementString:(NSString *)string {
 - (UIView*)viewForFieldAtIndex:(NSUInteger)fieldIndex {
     if (fieldIndex == _fieldViews.count) {
         return _textView;
-        
+
     } else {
         return [_fieldViews objectAtIndex:fieldIndex];
     }
@@ -742,7 +742,7 @@ replacementString:(NSString *)string {
 - (BOOL)willPostText:(NSString*)text {
     NSString *trimmedString = [text stringByTrimmingCharactersInSet:
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
+
     if (NIIsStringWithAnyText(trimmedString) &&
         !trimmedString.isWhitespaceAndNewlines) {
         if ([trimmedString length] > _maxCharCount) {
@@ -767,26 +767,26 @@ replacementString:(NSString *)string {
         if ([field isKindOfClass:[NIMessageRecipientField class]]) {
             NIPickerTextField* textField = [_fieldViews objectAtIndex:i];
             [(NIMessageRecipientField*)field setRecipients:textField.cells];
-            
+
         } else if ([field isKindOfClass:[NIMessageTextField class]]) {
             UITextField* textField = [_fieldViews objectAtIndex:i];
             [(NIMessageTextField*)field setText:textField.text];
         }
     }
-    
+
     NIMessageTextField* bodyField = [[[NIMessageTextField alloc] initWithTitle:nil
                                                                       required:NO] autorelease];
     bodyField.text = _textView.text;
     [fields addObject:bodyField];
-    
+
     [self showActivityView:YES];
-    
+
     [self messageWillSend:fields];
-    
+
     if ([_delegate respondsToSelector:@selector(composeController:didSendFields:)]) {
         [_delegate composeController:self didSendFields:fields];
     }
-    
+
     [self messageDidSend];
 }
 
@@ -795,12 +795,12 @@ replacementString:(NSString *)string {
 - (void)cancel:(BOOL)confirmIfNecessary {
     if (confirmIfNecessary && ![self messageShouldCancel]) {
         [self confirmCancellation];
-        
+
     } else {
         if ([_delegate respondsToSelector:@selector(composeControllerWillCancel:)]) {
             [_delegate composeControllerWillCancel:self];
         }
-        
+
         [self dismissModalViewControllerAnimated:NO];
     }
 }
@@ -829,7 +829,7 @@ replacementString:(NSString *)string {
             _activityView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [self.view addSubview:_activityView];
         }
-        
+
     } else {
         [_activityView removeFromSuperview];
         NI_RELEASE_SAFELY(_activityView);
@@ -877,10 +877,10 @@ replacementString:(NSString *)string {
                    cellForTableView: (UITableView *)tableView
                         atIndexPath: (NSIndexPath *)indexPath
                          withObject: (id)object {
-    
+
     // A pretty standard implementation of creating table view cells follows.
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"row"];
-    
+
     if (nil == cell) {
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault
                                        reuseIdentifier: @"row"]
@@ -888,9 +888,9 @@ replacementString:(NSString *)string {
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
+
     cell.textLabel.text = [object objectForKey:@"title"];
-    
+
     return cell;
 }
 

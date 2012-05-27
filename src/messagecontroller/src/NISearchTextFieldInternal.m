@@ -34,7 +34,7 @@
     if (self) {
         _textField = textField;
     }
-    
+
     return self;
 }
 
@@ -49,7 +49,7 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField*)textField {
     if ([_delegate respondsToSelector:@selector(textFieldShouldBeginEditing:)]) {
         return [_delegate textFieldShouldBeginEditing:textField];
-        
+
     } else {
         return YES;
     }
@@ -68,7 +68,7 @@
 - (BOOL)textFieldShouldEndEditing:(UITextField*)textField {
     if ([_delegate respondsToSelector:@selector(textFieldShouldEndEditing:)]) {
         return [_delegate textFieldShouldEndEditing:textField];
-        
+
     } else {
         return YES;
     }
@@ -90,12 +90,12 @@
     if (![_textField shouldUpdate:!string.length]) {
         return NO;
     }
-    
+
     SEL sel = @selector(textField:shouldChangeCharactersInRange:replacementString:);
     if ([_delegate respondsToSelector:sel]) {
         return [_delegate textField:textField shouldChangeCharactersInRange:range
                   replacementString:string];
-        
+
     } else {
         return YES;
     }
@@ -105,10 +105,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)textFieldShouldClear:(UITextField*)textField {
     [_textField shouldUpdate:YES];
-    
+
     if ([_delegate respondsToSelector:@selector(textFieldShouldClear:)]) {
         return [_delegate textFieldShouldClear:textField];
-        
+
     } else {
         return YES;
     }
@@ -121,11 +121,11 @@
     if ([_delegate respondsToSelector:@selector(textFieldShouldReturn:)]) {
         shouldReturn = [_delegate textFieldShouldReturn:textField];
     }
-    
+
     if (shouldReturn) {
         if (!_textField.searchesAutomatically) {
             [_textField search];
-            
+
         } else {
             [_textField performSelector:@selector(doneAction)];
         }

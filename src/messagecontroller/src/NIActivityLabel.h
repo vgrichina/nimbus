@@ -25,12 +25,12 @@ typedef enum {
 
 @interface NIActivityLabel : UIView {
     NIActivityLabelStyle      _style;
-    
+
     UIView*                   _bezelView;
     UIProgressView*           _progressView;
     UIActivityIndicatorView*  _activityIndicator;
     UILabel*                  _label;
-    
+
     float                     _progress;
     BOOL                      _smoothesProgress;
     NSTimer*                  _smoothTimer;

@@ -27,17 +27,17 @@
 
 @interface NISearchTextField : UITextField <NITableViewModelDelegate,UITableViewDelegate> {
     NISearchTextFieldInternal*  _internal;
-    
+
     UITableView* _tableView;
     NIGradientView*      _shadowView;
     UIButton*    _screenView;
-    
+
     NSTimer*  _searchTimer;
     CGFloat   _rowHeight;
-    
+
     BOOL _searchesAutomatically;
     BOOL _showsDarkScreen;
-    
+
     NITableViewSearchModel* _dataSource;
     NITableViewModel* _searchResults;
 }

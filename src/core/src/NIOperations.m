@@ -38,7 +38,7 @@
   NI_RELEASE_SAFELY(_url);
   NI_RELEASE_SAFELY(_data);
   NI_RELEASE_SAFELY(_processedObject);
-  
+
   [super dealloc];
 }
 
@@ -63,7 +63,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)main {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-  
+
   if ([self.url isFileURL]) {
     // Special case: load the image from disk without hitting the network.
 

@@ -27,7 +27,7 @@
         }
         sectionIndex++;
     }
-    
+
     return [[NITableViewModel alloc] initWithListArray:searchResults delegate:nil];
 }
 

@@ -99,7 +99,7 @@
     // As per the guidelines in the Objective-C docs for enumerators, we release the linked
     // list when we are finished enumerating.
     NI_RELEASE_SAFELY(_ll);
-    
+
     // We don't have to set _iterator to nil here because is already is.
   }
   return object;
@@ -311,11 +311,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSArray *)allObjects {
   NSMutableArray* mutableArrayOfObjects = [[NSMutableArray alloc] initWithCapacity:self.count];
-  
+
   for (id object in self) {
     [mutableArrayOfObjects addObject:object];
   }
-  
+
   NSArray* arrayOfObjects = [mutableArrayOfObjects copy];
   NI_RELEASE_SAFELY(mutableArrayOfObjects);
   return [arrayOfObjects autorelease];
@@ -329,7 +329,7 @@
       return YES;
     }
   }
-  
+
   return NO;
 }
 
@@ -372,25 +372,25 @@
   if (0 == location) {
     return;
   }
-  
+
   struct NILinkedListNode* node = (struct NILinkedListNode *)location;
-  
+
   if (0 != node->prev) {
     node->prev->next = node->next;
-    
+
   } else {
     _head = node->next;
   }
-  
+
   if (0 != node->next) {
     node->next->prev = node->prev;
-    
+
   } else {
     _tail = node->prev;
   }
-  
+
   [self _eraseNode:node];
-  
+
   --self.count;
   ++_modificationNumber;
 }
@@ -403,27 +403,27 @@
   if (nil == object) {
     return nil;
   }
-  
+
   struct NILinkedListNode* node = malloc(sizeof(struct NILinkedListNode));
   memset(node, 0, sizeof(struct NILinkedListNode));
-  
+
   node->object = [object retain];
-  
+
   // Empty condition.
   if (nil == _tail) {
     _head = node;
     _tail = node;
-    
+
   } else {
     // Non-empty condition.
     _tail->next = (struct NILinkedListNode*)node;
     node->prev = (struct NILinkedListNode*)_tail;
     _tail = node;
   }
-  
+
   ++self.count;
   ++_modificationNumber;
-  
+
   return (NILinkedListLocation *)node;
 }
 
@@ -449,10 +449,10 @@
     [self _eraseNode:node];
     node = next;
   }
-  
+
   _head = nil;
   _tail = nil;
-  
+
   self.count = 0;
   ++_modificationNumber;
 }

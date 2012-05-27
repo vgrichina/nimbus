@@ -26,8 +26,8 @@
     NIActivityLabel*  _activityView;
     BOOL              _originalStatusBarHidden;
     UIStatusBarStyle  _originalStatusBarStyle;
-    id<NIPostControllerDelegate> _delegate;    
-    
+    id<NIPostControllerDelegate> _delegate;
+
     UILabel *_charLimitLabel;
 //    UIImageView *_backgroundView;
     NSInteger _maxCharCount;

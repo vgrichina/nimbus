@@ -50,17 +50,17 @@ static const CGFloat kMinCursorWidth  = 50;
         _cellViews = [[NSMutableArray alloc] init];
         _lineCount = 1;
         _cursorOrigin = CGPointZero;
-        
+
         self.text = kEmpty;
         self.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         self.clearButtonMode = UITextFieldViewModeNever;
         self.returnKeyType = UIReturnKeyDone;
         self.enablesReturnKeyAutomatically = NO;
-        
+
         [self addTarget:self action:@selector(textFieldDidEndEditing)
        forControlEvents:UIControlEventEditingDidEnd];
     }
-    
+
     return self;
 }
 
@@ -68,7 +68,7 @@ static const CGFloat kMinCursorWidth  = 50;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
     NI_RELEASE_SAFELY(_cellViews);
-    
+
     [super dealloc];
 }
 
@@ -82,27 +82,27 @@ static const CGFloat kMinCursorWidth  = 50;
     ? kPaddingX + self.leftView.frame.size.width + kPaddingX/2
     : kPaddingX;
     CGFloat marginRight = kPaddingX + (self.rightView ? kClearButtonSize : 0);
-    
+
     _cursorOrigin.x = marginLeft;
     _cursorOrigin.y = marginY;
     _lineCount = 1;
-    
+
     if (self.frame.size.width) {
         for (NIPickerViewCell* cell in _cellViews) {
             [cell sizeToFit];
-            
+
             CGFloat lineWidth = _cursorOrigin.x + cell.frame.size.width + marginRight;
             if (lineWidth >= self.frame.size.width) {
                 _cursorOrigin.x = marginLeft;
                 _cursorOrigin.y += lineIncrement;
                 ++_lineCount;
             }
-            
+
             cell.frame = CGRectMake(_cursorOrigin.x, _cursorOrigin.y-kCellPaddingY,
                                     cell.frame.size.width, cell.frame.size.height);
             _cursorOrigin.x += cell.frame.size.width + kPaddingX;
         }
-        
+
         CGFloat remainingWidth = self.frame.size.width - (_cursorOrigin.x + marginRight);
         if (remainingWidth < kMinCursorWidth) {
             _cursorOrigin.x = marginLeft;
@@ -110,7 +110,7 @@ static const CGFloat kMinCursorWidth  = 50;
             ++_lineCount;
         }
     }
-    
+
     return _cursorOrigin.y + fontHeight + marginY;
 }
 
@@ -122,12 +122,12 @@ static const CGFloat kMinCursorWidth  = 50;
     if (previousHeight && newHeight != previousHeight) {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, newHeight);
         [self setNeedsDisplay];
-        
+
         SEL sel = @selector(textFieldDidResize:);
         if ([self.delegate respondsToSelector:sel]) {
             [self.delegate performSelector:sel withObject:self];
         }
-        
+
         [self scrollToVisibleLine:YES];
     }
 }
@@ -143,7 +143,7 @@ static const CGFloat kMinCursorWidth  = 50;
 - (CGFloat)topOfLine:(int)lineNumber {
     if (lineNumber == 0) {
         return 0;
-        
+
     } else {
         CGFloat lineHeight = self.font.lineHeight;
         CGFloat lineSpacing = kCellPaddingY*2 + kSpacingY;
@@ -187,7 +187,7 @@ static const CGFloat kMinCursorWidth  = 50;
 - (void)layoutSubviews {
     if (_dataSource) {
         [self layoutCells];
-        
+
     } else {
         _cursorOrigin.x = kPaddingX;
         _cursorOrigin.y = [self marginY];
@@ -195,7 +195,7 @@ static const CGFloat kMinCursorWidth  = 50;
             _cursorOrigin.x += self.leftView.frame.size.width + kPaddingX/2;
         }
     }
-    
+
     [super layoutSubviews];
 }
 
@@ -211,12 +211,12 @@ static const CGFloat kMinCursorWidth  = 50;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
     [super touchesBegan:touches withEvent:event];
-    
+
     if (_dataSource) {
         UITouch* touch = [touches anyObject];
         if (touch.view == self) {
             self.selectedCell = nil;
-            
+
         } else {
             if ([touch.view isKindOfClass:[NIPickerViewCell class]]) {
                 self.selectedCell = (NIPickerViewCell*)touch.view;
@@ -247,7 +247,7 @@ static const CGFloat kMinCursorWidth  = 50;
     if (_dataSource && [self.text isEqualToString:kSelected]) {
         // Hide the cursor while a cell is selected
         return CGRectMake(-10, 0, 0, 0);
-        
+
     } else {
         CGRect frame = CGRectOffset(bounds, _cursorOrigin.x, _cursorOrigin.y);
         frame.size.width -= (_cursorOrigin.x + kPaddingX + (self.rightView ? kClearButtonSize : 0));
@@ -274,7 +274,7 @@ static const CGFloat kMinCursorWidth  = 50;
         return CGRectMake(
                           bounds.origin.x+kPaddingX, self.marginY,
                           self.leftView.frame.size.width, self.leftView.frame.size.height);
-        
+
     } else {
         return bounds;
     }
@@ -286,7 +286,7 @@ static const CGFloat kMinCursorWidth  = 50;
     if (self.rightView) {
         return CGRectMake(bounds.size.width - kClearButtonSize, bounds.size.height - kClearButtonSize,
                           kClearButtonSize, kClearButtonSize);
-        
+
     } else {
         return bounds;
     }
@@ -311,7 +311,7 @@ static const CGFloat kMinCursorWidth  = 50;
     [super showSearchResults:show];
     if (show) {
         [self scrollToEditingLine:YES];
-        
+
     } else {
         [self scrollToVisibleLine:YES];
     }
@@ -326,7 +326,7 @@ static const CGFloat kMinCursorWidth  = 50;
     CGFloat visibleHeight = [self heightWithLines:1];
     CGFloat keyboardHeight = withKeyboard ? NIKeyboardHeightForOrientation(NIInterfaceOrientation()) : 0;
     CGFloat tableHeight = [UIScreen mainScreen].applicationFrame.size.height - (y + visibleHeight + keyboardHeight);
-    
+
     return CGRectMake(0, (self.frame.origin.y+self.frame.size.height)-1, superview.frame.size.width, tableHeight+1);
 }
 
@@ -336,17 +336,17 @@ static const CGFloat kMinCursorWidth  = 50;
     if (emptyText && !self.hasText && !self.selectedCell && self.cells.count) {
         [self selectLastCell];
         return NO;
-        
+
     } else if (emptyText && self.selectedCell) {
         [self removeSelectedCell];
         [super shouldUpdate:emptyText];
         return NO;
-        
+
     } else if (!emptyText && !self.hasText && self.selectedCell) {
         [self removeSelectedCell];
         [super shouldUpdate:emptyText];
         return YES;
-        
+
     } else {
         return [super shouldUpdate:emptyText];
     }
@@ -362,7 +362,7 @@ static const CGFloat kMinCursorWidth  = 50;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [_tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
+
     id object = [(NITableViewModel*)_searchResults objectAtIndexPath:indexPath];
     [self addCellWithObject:[object valueForKey:@"title"]];
 }
@@ -396,18 +396,18 @@ static const CGFloat kMinCursorWidth  = 50;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addCellWithObject:(id)object {
     NIPickerViewCell* cell = [[[NIPickerViewCell alloc] init] autorelease];
-    
+
     NSString* label = [NSString stringWithFormat:@"%@", object];
-    
+
     cell.object = object;
     cell.label = label;
     cell.font = self.font;
     [_cellViews addObject:cell];
     [self addSubview:cell];
-    
+
     // Reset text so the cursor moves to be at the end of the cellViews
     self.text = kEmpty;
-    
+
     SEL sel = @selector(textField:didAddCellAtIndex:);
     if ([self.delegate respondsToSelector:sel]) {
         [self.delegate performSelector:sel withObject:self withObject:(id)(_cellViews.count-1)];
@@ -422,7 +422,7 @@ static const CGFloat kMinCursorWidth  = 50;
         if (cell.object == object) {
             [_cellViews removeObjectAtIndex:i];
             [cell removeFromSuperview];
-            
+
             SEL sel = @selector(textField:didRemoveCellAtIndex:);
             if ([self.delegate respondsToSelector:sel]) {
                 [self.delegate performSelector:sel withObject:self withObject:(id)i];
@@ -430,7 +430,7 @@ static const CGFloat kMinCursorWidth  = 50;
             break;
         }
     }
-    
+
     // Reset text so the cursor oves to be at the end of the cellViews
     self.text = self.text;
 }
@@ -443,7 +443,7 @@ static const CGFloat kMinCursorWidth  = 50;
         [cell removeFromSuperview];
         [_cellViews removeObjectAtIndex:0];
     }
-    
+
     _selectedCell = nil;
 }
 
@@ -453,13 +453,13 @@ static const CGFloat kMinCursorWidth  = 50;
     if (_selectedCell) {
         _selectedCell.selected = NO;
     }
-    
+
     _selectedCell = cell;
-    
+
     if (_selectedCell) {
         _selectedCell.selected = YES;
         self.text = kSelected;
-        
+
     } else if (self.cells.count) {
         self.text = kEmpty;
     }
@@ -471,10 +471,10 @@ static const CGFloat kMinCursorWidth  = 50;
     if (_selectedCell) {
         [self removeCellWithObject:_selectedCell.object];
         _selectedCell = nil;
-        
+
         if (_cellViews.count) {
             self.text = kEmpty;
-            
+
         } else {
             self.text = @"";
         }

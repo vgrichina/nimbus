@@ -87,14 +87,14 @@
     NSArray*          _fields;
     UITextView*       _textView;
     NSArray*          _initialRecipients;
-    
+
     NIActivityLabel*  _activityView;
-    id<NIMessageControllerDelegate> _delegate;    
-    
+    id<NIMessageControllerDelegate> _delegate;
+
     UILabel* _charLimitLabel;
     NSInteger _maxCharCount;
     NITableViewModel* _dataSource;
-    
+
     NSMutableSet* activeRequests_;
     BOOL _showsRecipientPicker;
     BOOL _isModified;

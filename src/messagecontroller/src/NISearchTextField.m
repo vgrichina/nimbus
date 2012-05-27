@@ -39,20 +39,20 @@ static const CGFloat kDesiredTableHeight = 150;
 	self = [super initWithFrame:frame];
     if (self) {
         _internal = [[NISearchTextFieldInternal alloc] initWithTextField:self];
-        
+
         self.autocorrectionType = UITextAutocorrectionTypeNo;
         self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
         self.searchesAutomatically = YES;
-        
+
         [self addTarget:self action:@selector(didBeginEditing)
        forControlEvents:UIControlEventEditingDidBegin];
         [self addTarget:self action:@selector(didEndEditing)
        forControlEvents:UIControlEventEditingDidEnd];
-        
+
         [super setDelegate:_internal];
     }
-    
+
     return self;
 }
 
@@ -66,7 +66,7 @@ static const CGFloat kDesiredTableHeight = 150;
     NI_RELEASE_SAFELY(_tableView);
     NI_RELEASE_SAFELY(_shadowView);
     NI_RELEASE_SAFELY(_screenView);
-    
+
     [super dealloc];
 }
 
@@ -81,18 +81,18 @@ static const CGFloat kDesiredTableHeight = 150;
         [_screenView addTarget:self action:@selector(doneAction)
               forControlEvents:UIControlEventTouchUpInside];
     }
-    
+
     if (show) {
         [self.superviewForSearchResults addSubview:_screenView];
     }
-    
+
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.3];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(screenAnimationDidStop)];
-    
+
     _screenView.alpha = show ? 1 : 0;
-    
+
     [UIView commitAnimations];
 }
 
@@ -101,7 +101,7 @@ static const CGFloat kDesiredTableHeight = 150;
 - (NSString*)searchText {
     if (!self.hasText) {
         return @"";
-        
+
     } else {
         NSCharacterSet* whitespace = [NSCharacterSet whitespaceCharacterSet];
         return [self.text stringByTrimmingCharactersInSet:whitespace];
@@ -144,7 +144,7 @@ static const CGFloat kDesiredTableHeight = 150;
         [self layoutIfNeeded];
         [self showSearchResults:YES];
         [self.tableView reloadData];
-        
+
     } else {
         [self showSearchResults:NO];
     }
@@ -162,7 +162,7 @@ static const CGFloat kDesiredTableHeight = 150;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)doneAction {
     [self resignFirstResponder];
-    
+
     if (self.dataSource) {
         self.text = @"";
     }
@@ -242,7 +242,7 @@ static const CGFloat kDesiredTableHeight = 150;
         UIScrollView* scrollView = (UIScrollView*)[self ancestorOrSelfWithClass:[UIScrollView class]];
         scrollView.scrollEnabled = NO;
         scrollView.scrollsToTop = NO;
-        
+
         if (_showsDarkScreen) {
             [self showDarkScreen:YES];
         }
@@ -259,9 +259,9 @@ static const CGFloat kDesiredTableHeight = 150;
         UIScrollView* scrollView = (UIScrollView*)[self ancestorOrSelfWithClass:[UIScrollView class]];
         scrollView.scrollEnabled = YES;
         scrollView.scrollsToTop = YES;
-        
+
         [self showSearchResults:NO];
-        
+
         if (_showsDarkScreen) {
             [self showDarkScreen:NO];
         }
@@ -300,7 +300,7 @@ static const CGFloat kDesiredTableHeight = 150;
         _tableView.tableFooterView = footer;
         [footer release];
     }
-    
+
     return _tableView;
 }
 
@@ -311,7 +311,7 @@ static const CGFloat kDesiredTableHeight = 150;
     if (searchesAutomatically) {
         self.returnKeyType = UIReturnKeyDone;
         self.enablesReturnKeyAutomatically = NO;
-        
+
     } else {
         self.returnKeyType = UIReturnKeySearch;
         self.enablesReturnKeyAutomatically = YES;
@@ -342,7 +342,7 @@ static const CGFloat kDesiredTableHeight = 150;
 - (void)showSearchResults:(BOOL)show {
     if (show && _searchResults ) {
         [self createTableView];
-        
+
         if (!_shadowView) {
             _shadowView = [[NIGradientView alloc] init];
             _shadowView.startColor = RGBACOLOR(0, 0, 0, 0.18);
@@ -350,24 +350,24 @@ static const CGFloat kDesiredTableHeight = 150;
             _shadowView.backgroundColor = [UIColor clearColor];
             _shadowView.userInteractionEnabled = NO;
         }
-        
+
         if (!_tableView.superview) {
             _tableView.frame = [self rectForSearchResults:YES];
             _shadowView.frame = CGRectMake(_tableView.frame.origin.x,
                                            _tableView.frame.origin.y-1,
                                            _tableView.frame.size.width,
                                            kShadowHeight);
-            
+
             UIView* superview = self.superviewForSearchResults;
             [superview addSubview:_tableView];
-            
+
             if (_tableView.separatorStyle != UITableViewCellSeparatorStyleNone) {
                 [superview addSubview:_shadowView];
             }
         }
-        
+
         [_tableView deselectRowAtIndexPath:_tableView.indexPathForSelectedRow animated:NO];
-        
+
     } else {
         if (_tableView) {
             [_tableView removeFromSuperview];
@@ -384,14 +384,14 @@ static const CGFloat kDesiredTableHeight = 150;
     UIScrollView* scrollView = (UIScrollView*)[self ancestorOrSelfWithClass:[UIScrollView class]];
     if (scrollView) {
         return scrollView;
-        
+
     } else {
         for (UIView* view = self.superview; view; view = view.superview) {
             if (view.frame.size.height > kDesiredTableHeight) {
                 return view;
             }
         }
-        
+
         return self.superview;
     }
 }
@@ -400,14 +400,14 @@ static const CGFloat kDesiredTableHeight = 150;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGRect)rectForSearchResults:(BOOL)withKeyboard {
     UIView* superview = self.superviewForSearchResults;
-    
+
     CGFloat y = 0;
     UIView* view = self;
     while (view != superview) {
         y += view.frame.origin.y;
         view = view.superview;
     }
-    
+
     CGFloat height = self.frame.size.height;
     CGFloat keyboardHeight = withKeyboard ? NIKeyboardHeightForOrientation(NIInterfaceOrientation()) : 0;
     CGFloat tableHeight = self.window.frame.size.height - (self.frame.origin.y + height + keyboardHeight);
@@ -438,10 +438,10 @@ static const CGFloat kDesiredTableHeight = 150;
                    cellForTableView: (UITableView *)tableView
                         atIndexPath: (NSIndexPath *)indexPath
                          withObject: (id)object {
-    
+
     // A pretty standard implementation of creating table view cells follows.
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"row"];
-    
+
     if (nil == cell) {
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault
                                        reuseIdentifier: @"row"]
@@ -449,9 +449,9 @@ static const CGFloat kDesiredTableHeight = 150;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
+
     cell.textLabel.text = [object objectForKey:@"title"];
-    
+
     return cell;
 }
 

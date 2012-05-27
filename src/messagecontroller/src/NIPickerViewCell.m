@@ -40,16 +40,16 @@ static const CGFloat kMaxWidth = 250;
         _labelView.highlightedTextColor = [UIColor whiteColor];
         _labelView.lineBreakMode = UILineBreakModeTailTruncation;
         [self addSubview:_labelView];
-        
+
         self.startColor = RGBCOLOR(221, 231, 248);
         self.endColor = RGBACOLOR(188, 206, 241, 1);
-        
+
         self.backgroundColor = [UIColor clearColor];
         [self.layer setCornerRadius:13.0f];
         [self.layer setBorderWidth:1.0f];
         [self.layer setBorderColor:RGBCOLOR(161, 187, 255).CGColor];
     }
-    
+
     return self;
 }
 
@@ -58,7 +58,7 @@ static const CGFloat kMaxWidth = 250;
 - (void)dealloc {
     NI_RELEASE_SAFELY(_object);
     NI_RELEASE_SAFELY(_labelView);
-    
+
     [super dealloc];
 }
 
@@ -132,7 +132,7 @@ static const CGFloat kMaxWidth = 250;
         self.startColor = RGBCOLOR(221, 231, 248);
         self.endColor = RGBACOLOR(188, 206, 241, 1);
     }
-    
+
     [self setNeedsDisplay];
 }
 

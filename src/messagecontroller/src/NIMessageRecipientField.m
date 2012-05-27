@@ -33,7 +33,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
     NI_RELEASE_SAFELY(_recipients);
-    
+
     [super dealloc];
 }
 
@@ -57,14 +57,14 @@
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.rightViewMode = UITextFieldViewModeAlways;
-    
+
     if (controller.showsRecipientPicker) {
         UIButton* addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
         [addButton addTarget:controller action:@selector(showRecipientPicker)
             forControlEvents:UIControlEventTouchUpInside];
         textField.rightView = addButton;
     }
-    
+
     return textField;
 }
 

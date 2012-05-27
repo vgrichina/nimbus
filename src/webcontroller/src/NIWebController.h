@@ -83,7 +83,7 @@ UIActionSheetDelegate > {
     UIWebView*        _webView;
     UIToolbar*        _toolbar;
     UIActionSheet*    _actionSheet;
-    
+
     // Toolbar buttons
     UIBarButtonItem*  _backButton;
     UIBarButtonItem*  _forwardButton;
@@ -91,7 +91,7 @@ UIActionSheetDelegate > {
     UIBarButtonItem*  _stopButton;
     UIBarButtonItem*  _actionButton;
     UIBarButtonItem*  _activityItem;
-    
+
     NSURL*            _actionSheetURL;
     NSURL*            _loadingURL;
 }

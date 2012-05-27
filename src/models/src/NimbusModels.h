@@ -43,10 +43,10 @@
  * <div class="side-by-side-compare">
  * <pre>
  @implementation CatalogTableViewController
- 
+
  #pragma mark -
  #pragma mark UITableViewDataSource
- 
+
  - (NSArray *)rows {
    static NSArray* rows = nil;
    if (nil == rows) {
@@ -67,7 +67,7 @@
               @"Debuts", @"title",
               @"/shots/debuts", @"initWith",
               nil],
- 
+
              @"Facebook Albums",
              [NSDictionary dictionaryWithObjectsAndKeys:
               [FacebookPhotoAlbumViewController class], @"class",
@@ -94,7 +94,7 @@
               @"Game of Thrones", @"title",
               @"489714642733", @"initWith",
               nil],
- 
+
              nil];
      [rows retain];
    }
@@ -103,119 +103,119 @@
  <span style="color:gray">
  - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
    NSArray* rows = [self rows];
- 
+
    NSInteger numberOfSections = 0;
    for (id object in rows) {
      numberOfSections += [object isKindOfClass:[NSString class]];
    }
- 
+
    return MAX(1, numberOfSections);
  }
- 
+
  - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
    NSArray* rows = [self rows];
- 
+
    NSInteger sectionIndex = -1;
    for (id object in rows) {
      sectionIndex += [object isKindOfClass:[NSString class]];
- 
+
      if (sectionIndex == section) {
        return object;
      }
    }
- 
+
    return nil;
  }
- 
+
  - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
    NSArray* rows = [self rows];
- 
+
    NSInteger sectionIndex = -1;
    NSInteger numberOfRows = 0;
    for (id object in rows) {
      sectionIndex += [object isKindOfClass:[NSString class]];
- 
+
      if (sectionIndex == section && [object isKindOfClass:[NSDictionary class]]) {
        numberOfRows++;
      } else if (numberOfRows > 0) {
        break;
      }
    }
- 
+
    return numberOfRows;
  }
- 
+
  - (id)objectForIndexPath:(NSIndexPath *)indexPath {
    // UGH: This is slow. Thankfully it doesn't matter because we know that we're only ever going to
    // have < 100 items or so.
- 
+
    NSArray* rows = [self rows];
- 
+
    NSInteger sectionIndex = -1;
    NSInteger rowIndex = -1;
    for (id object in rows) {
      sectionIndex += [object isKindOfClass:[NSString class]];
- 
+
      if (sectionIndex == [indexPath section] && [object isKindOfClass:[NSDictionary class]]) {
        rowIndex++;
      } else if (rowIndex >= 0) {
        break;
      }
- 
+
      if (rowIndex == [indexPath row] && sectionIndex == [indexPath section]) {
        return object;
      }
    }
- 
+
    return nil;
  }</span>
- 
+
  - (UITableViewCell *)tableView: (UITableView *)tableView
           cellForRowAtIndexPath: (NSIndexPath *)indexPath {
    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"row"];
- 
+
    if (nil == cell) {
      cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault
                                     reuseIdentifier: @"row"]
              autorelease];
      cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
    }
- 
+
    id object = [self objectForIndexPath:indexPath];
- 
+
    cell.textLabel.text = [object objectForKey:@"title"];
- 
+
    return cell;
  }
- 
- 
+
+
  #pragma mark -
  #pragma mark UITableViewDelegate
- 
+
  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
    id object = [self objectForIndexPath:indexPath];
- 
+
    Class vcClass = [object objectForKey:@"class"];
    id initWith = [object objectForKey:@"initWith"];
    NSString* title = [object objectForKey:@"title"];
    UIViewController* vc = [[[vcClass alloc] initWith:initWith] autorelease];
    vc.title = title;
- 
+
    [self.navigationController pushViewController:vc animated:YES];
  }
- 
+
  @end</pre>
  * </div>
  *
  * <div class="side-by-side-compare">
  * <pre>
  @implementation CatalogTableViewController
- 
+
  - (void)dealloc {
    NI_RELEASE_SAFELY(_model);
    [super dealloc];
  }
- 
+
  - (id)initWithStyle:(UITableViewStyle)style {
    if ((self = [super initWithStyle:style])) {
      NSArray* tableContents =
@@ -236,7 +236,7 @@
        @"Debuts", @"title",
        @"/shots/debuts", @"initWith",
        nil],
-      
+
       @"Facebook Albums",
       [NSDictionary dictionaryWithObjectsAndKeys:
        [FacebookPhotoAlbumViewController class], @"class",
@@ -269,49 +269,49 @@
    }
    return self;
  }
- 
+
  - (void)viewDidLoad {
    [super viewDidLoad];
- 
+
    self.tableView.dataSource = _model;
  }
- 
+
  #pragma mark -
  #pragma mark NITableViewModelDelegate
- 
+
  - (UITableViewCell *)tableViewModel: (NITableViewModel *)tableViewModel
                     cellForTableView: (UITableView *)tableView
                          atIndexPath: (NSIndexPath *)indexPath
                           withObject: (id)object {
    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"row"];
- 
+
    if (nil == cell) {
      cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault
                                     reuseIdentifier: @"row"]
              autorelease];
      cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
    }
- 
+
    cell.textLabel.text = [object objectForKey:@"title"];
- 
+
    return cell;
  }
- 
+
  #pragma mark -
  #pragma mark UITableViewDelegate
- 
+
  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
    id object = [_model objectAtIndexPath:indexPath];
- 
+
    Class vcClass = [object objectForKey:@"class"];
    id initWith = [object objectForKey:@"initWith"];
    NSString* title = [object objectForKey:@"title"];
    UIViewController* vc = [[[vcClass alloc] initWith:initWith] autorelease];
    vc.title = title;
- 
+
    [self.navigationController pushViewController:vc animated:YES];
  }
- 
+
  @end</pre>
  * </div>
  * <div class="clearfix"></div>

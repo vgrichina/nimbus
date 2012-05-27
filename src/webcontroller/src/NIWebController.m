@@ -30,7 +30,7 @@
 - (void)releaseAllSubviews {
     _actionSheet.delegate = nil;
     _webView.delegate = nil;
-    
+
     NI_RELEASE_SAFELY(_actionSheet);
     NI_RELEASE_SAFELY(_webView);
     NI_RELEASE_SAFELY(_toolbar);
@@ -47,7 +47,7 @@
     NI_RELEASE_SAFELY(_actionSheetURL);
     NI_RELEASE_SAFELY(_loadingURL);
     [self releaseAllSubviews];
-    
+
     [super dealloc];
 }
 
@@ -93,22 +93,22 @@
     if ([_actionSheet isVisible]) {
         // It shouldn't be possible to tap the share action button again on anything but the iPad.
         NIDASSERT(NIIsPad());
-        
+
         [_actionSheet dismissWithClickedButtonIndex:[_actionSheet cancelButtonIndex] animated:YES];
-        
+
         // We remove the action sheet here just in case the delegate isn't properly implemented.
         _actionSheet.delegate = nil;
         NI_RELEASE_SAFELY(_actionSheet);
         NI_RELEASE_SAFELY(_actionSheetURL);
-        
+
         // Don't show the menu again.
         return;
     }
-    
+
     // Remember the URL at this point
     [_actionSheetURL release];
     _actionSheetURL = [self.URL copy];
-    
+
     if (nil == _actionSheet) {
         _actionSheet =
         [[UIActionSheet alloc] initWithTitle:[_actionSheetURL absoluteString]
@@ -128,7 +128,7 @@
             [_actionSheet setCancelButtonIndex:[_actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", @"")]];
         }
     }
-    
+
     if (NIIsPad()) {
         [_actionSheet showFromBarButtonItem:_actionButton animated:YES];
     } else {
@@ -138,12 +138,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)updateToolbarWithOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    
+
     CGRect toolbarFrame = _toolbar.frame;
     toolbarFrame.size.height = NIToolbarHeightForOrientation(interfaceOrientation);
     toolbarFrame.origin.y = self.view.bounds.size.height - toolbarFrame.size.height;
     _toolbar.frame = toolbarFrame;
-    
+
     CGRect webViewFrame = _webView.frame;
     webViewFrame.size.height = self.view.bounds.size.height - toolbarFrame.size.height;
     _webView.frame = webViewFrame;
@@ -157,23 +157,23 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)loadView {
     [super loadView];
-    
+
     CGRect bounds = self.view.bounds;
-    
+
     CGFloat toolbarHeight = NIToolbarHeightForOrientation(NIInterfaceOrientation());
     CGRect toolbarFrame = CGRectMake(0, bounds.size.height - toolbarHeight,
                                      bounds.size.width, toolbarHeight);
-    
+
     _toolbar = [[UIToolbar alloc] initWithFrame:toolbarFrame];
     _toolbar.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin
                                  | UIViewAutoresizingFlexibleWidth);
-    
+
     UIActivityIndicatorView* spinner =
     [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
       UIActivityIndicatorViewStyleWhite] autorelease];
     [spinner startAnimating];
     _activityItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
-    
+
     UIImage* backIcon = [UIImage imageWithContentsOfFile:
                          NIPathForBundleResource(nil, @"NimbusWebController.bundle/gfx/backIcon.png")];
     // We weren't able to find the forward or back icons in your application's resources.
@@ -183,7 +183,7 @@
     // and verifying that the 'gfx' directory is blue. Also verify that the bundle is being
     // copied in the Copy Bundle Resources phase.
     NIDASSERT(nil != backIcon);
-    
+
     _backButton =
     [[UIBarButtonItem alloc] initWithImage:backIcon
                                      style:UIBarButtonItemStylePlain
@@ -191,7 +191,7 @@
                                     action:@selector(backAction)];
     _backButton.tag = 2;
     _backButton.enabled = NO;
-    
+
     UIImage* forwardIcon = [UIImage imageWithContentsOfFile:
                             NIPathForBundleResource(nil, @"NimbusWebController.bundle/gfx/forwardIcon.png")];
     // We weren't able to find the forward or back icons in your application's resources.
@@ -201,7 +201,7 @@
     // and verifying that the 'gfx' directory is blue. Also verify that the bundle is being
     // copied in the Copy Bundle Resources phase.
     NIDASSERT(nil != forwardIcon);
-    
+
     _forwardButton =
     [[UIBarButtonItem alloc] initWithImage:forwardIcon
                                      style:UIBarButtonItemStylePlain
@@ -217,12 +217,12 @@
     _stopButton.tag = 3;
     _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:
                      UIBarButtonSystemItemAction target:self action:@selector(shareAction)];
-    
+
     UIBarItem* flexibleSpace =
     [[[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace
                                                    target: nil
                                                    action: nil] autorelease];
-    
+
     _toolbar.items = [NSArray arrayWithObjects:
                       _backButton,
                       flexibleSpace,
@@ -233,9 +233,9 @@
                       _actionButton,
                       nil];
     [self.view addSubview:_toolbar];
-    
+
     CGRect webViewFrame = NIRectContract(bounds, 0, toolbarHeight);
-    
+
     _webView = [[UIWebView alloc] initWithFrame:webViewFrame];
     _webView.delegate = self;
     _webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth
@@ -247,7 +247,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidUnload {
     [super viewDidUnload];
-    
+
     [self releaseAllSubviews];
 }
 
@@ -262,7 +262,7 @@
     // If the browser launched the media player, it steals the key window and never gives it
     // back, so this is a way to try and fix that.
     [self.view.window makeKeyWindow];
-    
+
     [super viewWillDisappear:animated];
 }
 
@@ -287,7 +287,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request
  navigationType:(UIWebViewNavigationType)navigationType {
-    
+
     [_loadingURL release];
     _loadingURL = [request.mainDocumentURL copy];
     _backButton.enabled = [_webView canGoBack];
@@ -297,12 +297,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)webViewDidStartLoad:(UIWebView*)webView {
-    
+
     self.title = NSLocalizedString(@"Loading...", @"");
     if (!self.navigationItem.rightBarButtonItem) {
         [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
     }
-    
+
     NSInteger buttonIndex = 0;
     for (UIBarButtonItem* button in _toolbar.items) {
         if (button.tag == 3) {
@@ -319,13 +319,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)webViewDidFinishLoad:(UIWebView*)webView {
-    
+
     NI_RELEASE_SAFELY(_loadingURL);
     self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     if (self.navigationItem.rightBarButtonItem == _activityItem) {
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
     }
-    
+
     NSInteger buttonIndex = 0;
     for (UIBarButtonItem* button in _toolbar.items) {
         if (button.tag == 3) {
@@ -336,14 +336,14 @@
         }
         ++buttonIndex;
     }
-    
+
     _backButton.enabled = [_webView canGoBack];
     _forwardButton.enabled = [_webView canGoForward];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)webView:(UIWebView*)webView didFailLoadWithError:(NSError*)error {
-    
+
     NI_RELEASE_SAFELY(_loadingURL);
     [self webViewDidFinishLoad:webView];
 }
@@ -403,7 +403,7 @@
     _toolbar.hidden = hidden;
     if (hidden) {
         _webView.frame = self.view.bounds;
-        
+
     } else {
         _webView.frame = NIRectContract(self.view.bounds, 0, _toolbar.frame.size.height);
     }

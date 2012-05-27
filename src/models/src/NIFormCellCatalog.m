@@ -162,7 +162,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
   NI_RELEASE_SAFELY(_labelText);
-  
+
   [super dealloc];
 }
 
@@ -210,7 +210,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)prepareForReuse {
   [super prepareForReuse];
-  
+
   NI_RELEASE_SAFELY(_element);
 }
 
@@ -321,7 +321,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
   NI_RELEASE_SAFELY(_switchControl);
-  
+
   [super dealloc];
 }
 
@@ -439,7 +439,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)buttonWasTapped:(id)sender {
   NIButtonFormElement* buttonElement = (NIButtonFormElement *)self.element;
-  
+
   if (nil != buttonElement.tappedSelector && nil != buttonElement.tappedTarget
       && [buttonElement.tappedTarget respondsToSelector:buttonElement.tappedSelector]) {
     [buttonElement.tappedTarget performSelector:buttonElement.tappedSelector];
